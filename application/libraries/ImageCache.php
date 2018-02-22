@@ -377,7 +377,7 @@ ob_start();
     private function set_cached_filename() {
         $pathinfo = pathinfo($this->image_src);
         //$this->cached_filename = $this->cached_image_directory . '/' . md5($this->cached_directory_version . basename($this->image_src) . $this->image_src_version) . '.' . $this->file_extension;
-        $this->cached_filename = $this->cached_image_directory . '/' . time() . '.' . $this->file_extension;
+        $this->cached_filename = $this->cached_image_directory . '/optimized_' . time() . '.' . $this->file_extension;
         
     }
 

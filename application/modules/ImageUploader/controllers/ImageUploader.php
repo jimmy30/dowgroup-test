@@ -72,7 +72,7 @@ class ImageUploader extends CI_Controller {
                         if($is_watermark)
                             $this->create_watermark($data["file_name"]);
 
-                                                $this->create_optimzed_image($data["file_name"]);
+                        $this->create_optimzed_image($data["file_name"]);
 
                         $this->session->set_flashdata('msg', 'Image has been uplaoded successfully!');
 
@@ -94,7 +94,6 @@ class ImageUploader extends CI_Controller {
              $imagecache->cached_image_directory = $this->config->item('upload_path');
 
              $cached_img = $imagecache->cache( $this->config->item('upload_path').$filename );
-             rename($this->config->item('upload_path').basename($cached_img),$this->config->item('upload_path').'optimized_'.basename($cached_img));
         }
         public function create_thumb($filename)
         {
