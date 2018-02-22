@@ -30,6 +30,7 @@ class ImageUploader extends CI_Controller {
         }
 	public function index()
 	{
+
             
 		$this->load->view('index',["msg"=>'']);
 	}
@@ -48,9 +49,8 @@ class ImageUploader extends CI_Controller {
                 $config['max_size']             = $this->config->item('max_size');
                 $config['max_width']            = $this->config->item('max_width');
                 $config['max_height']           = $this->config->item('max_height');
-                $config['file_name'] = time().$_FILES["userfiles"]['name'];
+                $config['file_name'] = time();
                 
-
                 $this->load->library('upload', $config);
 
 
@@ -65,11 +65,14 @@ class ImageUploader extends CI_Controller {
 
                     if($data)
                     {
+                        
                         if($is_tumb)
                             $this->create_thumb($data["file_name"]);
 
                         if($is_watermark)
                             $this->create_watermark($data["file_name"]);
+
+                                                $this->create_optimzed_image($data["file_name"]);
 
                         $this->session->set_flashdata('msg', 'Image has been uplaoded successfully!');
 
@@ -78,10 +81,21 @@ class ImageUploader extends CI_Controller {
                     {
                         $this->session->set_flashdata('msg', 'Couldn\'t upload!');
                     }
-                       
+                    
                 }
         }
         
+        public function create_optimzed_image($filename)
+        {
+            $this->load->library('ImageCache');
+            
+            $imagecache = new ImageCache();
+
+             $imagecache->cached_image_directory = $this->config->item('upload_path');
+
+             $cached_img = $imagecache->cache( $this->config->item('upload_path').$filename );
+             rename($this->config->item('upload_path').basename($cached_img),$this->config->item('upload_path').'optimized_'.basename($cached_img));
+        }
         public function create_thumb($filename)
         {
             $image_cfg['image_library'] = 'GD2';
